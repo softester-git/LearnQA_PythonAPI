@@ -1,6 +1,8 @@
+from json.decoder import JSONDecodeError
 import requests
 
-
-print("Hellow from Alexander :)")
-#response = requests.get("https://playground.learnqa.ru/api/hello")
-#print(response.text)
+try:
+    response = requests.get("https://playground.learnqa.ru/api/get_text")
+    print(response.json())
+except JSONDecodeError:
+    print("not json")

@@ -2,7 +2,43 @@ from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 
+
 class TestUserGet(BaseCase):
+    def test_get_data_another_user(self):
+        # Create first user
+        data0 = self.prepare_registration_data()
+        response0 = MyRequests.post("/user/", data=data0)
+        Assertions.assert_code_status(response0, 200)
+        Assertions.assert_json_has_key(response0, "id")
+
+        # Create second user
+        data1 = self.prepare_registration_data()
+        response1 = MyRequests.post("/user/", data=data1)
+        Assertions.assert_code_status(response1, 200)
+        Assertions.assert_json_has_key(response1, "id")
+        user1_id = self.get_json_value(response1, "id")
+
+        # First user login
+        data2 = {
+            "email": data0["email"],
+            "password": data0["password"]
+        }
+        response2 = MyRequests.post("/user/login", data2)
+        auth_sid = self.get_cookie(response2, "auth_sid")
+        token = self.get_header(response2, "x-csrf-token")
+
+
+        # First user try get second users data
+        response3 = MyRequests.get(f"/user/{user1_id}",
+                                 headers={"x-csrf-token": token},
+                                 cookies={"auth_sid": auth_sid})
+
+        unexpected_fields = ["email", "lastName", "firstName", "password"]
+        expected_fields = ["username"]
+        Assertions.assert_json_has_keys(response3, expected_fields)
+        Assertions.assert_json_has_no_keys(response3, unexpected_fields)
+
+    # From video lessons
     def test_user_detail_not_auth(self):
         response = MyRequests.get("/user/2")
         Assertions.assert_json_has_key(response, "username")
@@ -26,4 +62,5 @@ class TestUserGet(BaseCase):
                                  cookies={"auth_sid": auth_sid})
 
         expected_field = ["email", "username", "lastName", "firstName"]
+        print(response2.text)
         Assertions.assert_json_has_keys(response2, expected_field)

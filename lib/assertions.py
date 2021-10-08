@@ -15,7 +15,6 @@ class Assertions:
 
     @staticmethod
     def assert_json_has_key(response: Response, name):
-        print(response)
         try:
             response_as_dict = response.json()
         except json.JSONDecodeError:

@@ -10,7 +10,6 @@ class TestUserRegister(BaseCase):
         email = "test.com"
         data = self.prepare_registration_data(email=email)
         response = MyRequests.post("/user/", data=data)
-        print(response.content)
         Assertions.assert_code_status(response, 400)
         assert response.content.decode("utf-8") == f"Invalid email format"
 

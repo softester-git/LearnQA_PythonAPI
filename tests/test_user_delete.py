@@ -1,9 +1,15 @@
+import allure
+
 from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 
+@allure.epic("Delete cases")
 class TestUserDelete(BaseCase):
 
+    @allure.epic("Delete cases")
+    @allure.feature("Delete users")
+    @allure.story("Delete undeleted user")
     def test_delete_user_id_2(self):
         data = {
             'email': 'vinkotov@example.com',
@@ -20,6 +26,9 @@ class TestUserDelete(BaseCase):
         Assertions.assert_code_status(response0, 400)
         assert response0.content.decode("utf-8") == f"Please, do not delete test users with ID 1, 2, 3, 4 or 5."
 
+    @allure.epic("Delete cases")
+    @allure.feature("Delete users")
+    @allure.story("Delete self user")
     def test_positive_delete_case(self):
         data1 = self.prepare_registration_data()
         response1 = MyRequests.post("/user/", data=data1)
@@ -44,6 +53,9 @@ class TestUserDelete(BaseCase):
         Assertions.assert_code_status(response3, 404)
         assert response3.content.decode("utf-8") == f"User not found"
 
+    @allure.epic("Delete cases")
+    @allure.feature("Delete users")
+    @allure.story("Delete unself user")
     def test_negative_delete_case(self):
         # Create first user
         data0 = self.prepare_registration_data()

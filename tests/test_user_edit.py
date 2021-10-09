@@ -1,9 +1,14 @@
+import allure
+
 from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 
+@allure.epic("Edit cases")
 class TestUserEdit(BaseCase):
-
+    @allure.epic("Edit cases")
+    @allure.feature("Edit users")
+    @allure.story("Shorten the firstname to 1 symbol")
     def test_edit_short_firstname(self):
         data1 = self.prepare_registration_data()
         response1 = MyRequests.post("/user/", data=data1)
@@ -24,6 +29,9 @@ class TestUserEdit(BaseCase):
                                  data={"firstName": "a"})
         Assertions.assert_code_status(response3, 400)
 
+    @allure.epic("Edit cases")
+    @allure.feature("Edit users")
+    @allure.story("Change email to wrong value")
     def test_change_email_to_wrong_value(self):
         email = "test.com"
         data1 = self.prepare_registration_data()
@@ -45,6 +53,9 @@ class TestUserEdit(BaseCase):
                                  data={"email": email})
         Assertions.assert_code_status(response3, 400)
 
+    @allure.epic("Edit cases")
+    @allure.feature("Edit users")
+    @allure.story("Change not user own data")
     def test_edit_another_user_data(self):
         # Create first user
         data0 = self.prepare_registration_data()
@@ -73,7 +84,9 @@ class TestUserEdit(BaseCase):
                                  data={"firstName": new_name})
         Assertions.assert_code_status(response3, 400)
 
-
+    @allure.epic("Edit cases")
+    @allure.feature("Edit users")
+    @allure.story("Edit by not authorized user")
     def test_edit_by_not_authorized_user(self):
         data = self.prepare_registration_data()
         response1 = MyRequests.post("/user/", data=data)
@@ -93,7 +106,9 @@ class TestUserEdit(BaseCase):
         Assertions.assert_code_status(response3, 400)
 
 
-
+    @allure.epic("Edit cases")
+    @allure.feature("Edit users")
+    @allure.story("Edit just created user")
     def test_edit_just_created_user(self):
         # REGISTER
         register_data = self.prepare_registration_data()

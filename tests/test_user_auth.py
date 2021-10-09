@@ -4,7 +4,7 @@ from lib.assertions import Assertions
 from lib.my_requests import MyRequests
 import allure
 
-@allure.epic("Authrization cases")
+@allure.epic("Authorization cases")
 class TestUserAuth(BaseCase):
 
     exclude_params = [
@@ -12,8 +12,8 @@ class TestUserAuth(BaseCase):
         ("no_token")
     ]
 
-    @allure.epic("Authrization cases")
-    @allure.feature("Login method")
+    @allure.epic("Authorization cases")
+    @allure.feature("Login user")
     @allure.story("Get parameters on login")
     def setup(self):
         data = {
@@ -27,8 +27,8 @@ class TestUserAuth(BaseCase):
         self.token = self.get_header(response1, "x-csrf-token")
         self.user_id = self.get_json_value(response1, "user_id")
 
-    @allure.epic("Authrization cases")
-    @allure.feature("Auth method")
+    @allure.epic("Authorization cases")
+    @allure.feature("Login user")
     @allure.story("Assert user_id authorized user")
     @allure.description("This test successfully authorize user by email and password")
     def test_auth_user(self):
@@ -45,8 +45,8 @@ class TestUserAuth(BaseCase):
             "User id in auth method is not equal to user id from check method"
         )
 
-    @allure.epic("Authrization cases")
-    @allure.feature("Auth method")
+    @allure.epic("Authorization cases")
+    @allure.feature("Login user")
     @allure.story("Denie on empty cookies or headers")
     @allure.description("This test checks authorization status w/o sending auth cookies or token")
     @pytest.mark.parametrize("condition", exclude_params)

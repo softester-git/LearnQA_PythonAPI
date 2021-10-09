@@ -1,9 +1,14 @@
+import allure
+
 from lib.my_requests import MyRequests
 from lib.base_case import BaseCase
 from lib.assertions import Assertions
 
-
+@allure.epic("Get cases")
 class TestUserGet(BaseCase):
+    @allure.epic("Get data cases")
+    @allure.feature("Get user data")
+    @allure.story("Get not user own data")
     def test_get_data_another_user(self):
         # Create first user
         data0 = self.prepare_registration_data()
@@ -39,6 +44,10 @@ class TestUserGet(BaseCase):
         Assertions.assert_json_has_no_keys(response3, unexpected_fields)
 
     # From video lessons
+    @allure.epic("Get data cases")
+    @allure.feature("Get user data")
+    @allure.story("Get data by not authorized user")
+    @allure.description("Test cases from video lessons")
     def test_user_detail_not_auth(self):
         response = MyRequests.get("/user/2")
         Assertions.assert_json_has_key(response, "username")
@@ -46,6 +55,10 @@ class TestUserGet(BaseCase):
         Assertions.assert_json_has_no_key(response, "firstName")
         Assertions.assert_json_has_no_key(response, "lastName")
 
+    @allure.epic("Get data cases")
+    @allure.feature("Get user data")
+    @allure.story("Get user own data")
+    @allure.description("Test cases from video lessons")
     def test_get_user_details_auth_as_same_user(self):
         data = {
             "email": "vinkotov@example.com",
